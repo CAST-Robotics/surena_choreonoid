@@ -15,7 +15,7 @@
 using namespace std;
 using namespace cnoid;
 using namespace Eigen;
-//SR1
+// SR1
 /*
 const double pgain[] = {
     8000.0, 8000.0, 8000.0, 8000.0, 8000.0, 8000.0,
@@ -31,23 +31,23 @@ const double dgain[] = {
     100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0,
     100.0, 100.0, 100.0 };
 */
-//Surena IV
+// Surena IV
 
 const double pgain[] = {
     8000.0, 8000.0, 8000.0, 8000.0, 8000.0, 8000.0,
     8000.0, 8000.0, 8000.0, 8000.0, 8000.0, 8000.0, 8000.0,
     8000.0, 3000.0, 3000.0, 3000.0, 3000.0, 3000.0,
     3000.0, 3000.0, 3000.0, 3000.0, 3000.0, 3000.0, 3000.0,
-    3000.0, 3000.0, 3000.0 };
+    3000.0, 3000.0, 3000.0};
 
 const double dgain[] = {
     100.0, 100.0, 100.0, 100.0, 100.0, 100.0,
     100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0,
     100.0, 100.0, 100.0, 100.0, 100.0, 100.0,
     100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0,
-    100.0, 100.0, 100.0 };
+    100.0, 100.0, 100.0};
 
-//SurenaV
+// SurenaV
 /*
 const double pgain[] = {
     10000.0, 10000.0, 10000.0, 10000.0, 10000.0, 10000.0,
@@ -63,8 +63,9 @@ const double dgain[] = {
     100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0,
     100.0, 100.0, 100.0 };
 */
-class SurenaController : public SimpleController{
-  
+class SurenaController : public SimpleController
+{
+
     ros::NodeHandle nh;
     ros::Subscriber keyboardCommandSub_ = nh.subscribe("/keyboard_command", 1, &SurenaController::commandHandler, this);
 
@@ -73,17 +74,17 @@ class SurenaController : public SimpleController{
     double qref[29];
     double qold[29];
     BodyPtr ioBody;
-    ForceSensor* leftForceSensor;
-    ForceSensor* rightForceSensor;
-    AccelerationSensor* accelSensor;
-    RateGyroSensor* gyro;
-    Robot* robot;
+    ForceSensor *leftForceSensor;
+    ForceSensor *rightForceSensor;
+    AccelerationSensor *accelSensor;
+    RateGyroSensor *gyro;
+    Robot *robot;
     int surenaIndex_[12] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     int sr1Index_[12] = {2, 0, 1, 3, 4, 5, 15, 13, 14, 16, 17, 18};
 
-    double init_com_pos[3]={0, 0, 0.71}, init_com_orient[3]={0, 0, 0}, final_com_pos[3]={0, 0, 0.71}, final_com_orient[3]={0, 0, 0};
-    double init_lankle_pos[3]={0, 0.1, 0}, init_lankle_orient[3]={0, 0, 0}, final_lankle_pos[3]={0, 0.1, 0}, final_lankle_orient[3]={0, 0, 0};
-    double init_rankle_pos[3]={0, -0.1, 0}, init_rankle_orient[3]={0, 0, 0}, final_rankle_pos[3]={0, -0.1, 0}, final_rankle_orient[3]={0, 0, 0};
+    double init_com_pos[3] = {0, 0, 0.71}, init_com_orient[3] = {0, 0, 0}, final_com_pos[3] = {0, 0, 0.71}, final_com_orient[3] = {0, 0, 0};
+    double init_lankle_pos[3] = {0, 0.1, 0}, init_lankle_orient[3] = {0, 0, 0}, final_lankle_pos[3] = {0, 0.1, 0}, final_lankle_orient[3] = {0, 0, 0};
+    double init_rankle_pos[3] = {0, -0.1, 0}, init_rankle_orient[3] = {0, 0, 0}, final_rankle_pos[3] = {0, -0.1, 0}, final_rankle_orient[3] = {0, 0, 0};
     double jnt_command[12];
     int status;
 
@@ -105,7 +106,6 @@ class SurenaController : public SimpleController{
     int size_;
 
 public:
-
     void callGeneralTraj(double time)
     {
         robot->generalTrajGen(dt, time, init_com_pos, final_com_pos, init_com_orient, final_com_orient,
@@ -114,16 +114,18 @@ public:
         idx = 0;
     }
 
-    void callTraj(){
+    void callTraj()
+    {
         robot->trajGen(step_count, t_step, alpha, t_double_support, COM_height,
-                       step_length, step_width, dt, theta, ankle_height, 
+                       step_length, step_width, dt, theta, ankle_height,
                        step_height, 0);
         idx = 0;
     }
 
-    void commandHandler(const std_msgs::Int32 &msg){
+    void commandHandler(const std_msgs::Int32 &msg)
+    {
         int command = msg.data;
-        if(!this->isRunningTrajectory)
+        if (!this->isRunningTrajectory)
         {
             switch (command)
             {
@@ -162,7 +164,7 @@ public:
         }
     }
 
-    virtual bool initialize(SimpleControllerIO* io) override
+    virtual bool initialize(SimpleControllerIO *io) override
     {
         dt = io->timeStep();
         final_com_pos[2] = 0.68;
@@ -179,33 +181,31 @@ public:
         io->enableInput(rightForceSensor);
         accelSensor = ioBody->findDevice<AccelerationSensor>("WaistAccelSensor");
         io->enableInput(accelSensor);
-        gyro = ioBody->findDevice<RateGyroSensor>("WaistGyro"); //SR1 & SurenaV
-        //gyro = ioBody->findDevice<RateGyroSensor>("gyrometer"); //SurenaIV
+        gyro = ioBody->findDevice<RateGyroSensor>("WaistGyro"); // SR1 & SurenaV
+        // gyro = ioBody->findDevice<RateGyroSensor>("gyrometer"); //SurenaIV
         io->enableInput(gyro);
         io->enableInput(ioBody->link(0), LINK_POSITION);
 
-        for(int i=0; i < ioBody->numJoints(); ++i){
-            Link* joint = ioBody->joint(i);
+        for (int i = 0; i < ioBody->numJoints(); ++i)
+        {
+            Link *joint = ioBody->joint(i);
             joint->setActuationMode(Link::JOINT_TORQUE);
             io->enableIO(joint);
-            if(i == 5 || i == 11){
+            if (i == 5 || i == 11)
+            {
                 // Enabling Ankles Position IO (required by bump sensor)
                 io->enableInput(joint, LINK_POSITION);
             }
             qref[i] = joint->q();
             qold[i] = qref[i];
-            
         }
         return true;
     }
     virtual bool control() override
     {
-        // ros::ServiceClient bumpSensor = nh->serviceClient<surena_simulation::bump>("/bumpSensor");
-        // ros::ServiceClient jnt_client = nh->serviceClient<trajectory_planner::JntAngs>("/jnt_angs");
-        // trajectory_planner::JntAngs jntangs;
         size_ = robot->getTrajSize();
-        cout << size_ << endl;
-        if (idx < size_ - 1){
+        if (idx < size_ - 1)
+        {
             double left_ft[] = {float(leftForceSensor->f().z()),
                                 float(leftForceSensor->tau().x()),
                                 float(leftForceSensor->tau().y())};
@@ -215,68 +215,65 @@ public:
 
             int right_bump[] = {0, 0, 0};
             int left_bump[] = {0, 0, 0};
-                                    
+
             double cur_q[ioBody->numJoints()];
             double jnt_vel[ioBody->numJoints()];
-            for(int i=0; i < ioBody->numJoints(); ++i){
-                    Link* joint = ioBody->joint(i);
-                    cur_q[i] = joint->q();
-                    jnt_vel[i] = (cur_q[surenaIndex_[i]] - qold[surenaIndex_[i]]) / dt;
+            for (int i = 0; i < ioBody->numJoints(); ++i)
+            {
+                Link *joint = ioBody->joint(i);
+                cur_q[i] = joint->q();
+                jnt_vel[i] = (cur_q[surenaIndex_[i]] - qold[surenaIndex_[i]]) / dt;
             }
 
-            double accelerometer[] = {accelSensor->dv()(0),accelSensor->dv()(1),accelSensor->dv()(2)};
-            double gyroscope[] = {gyro->w()(0), gyro->w()(1),gyro->w()(2)};
+            double accelerometer[] = {accelSensor->dv()(0), accelSensor->dv()(1), accelSensor->dv()(2)};
+            double gyroscope[] = {gyro->w()(0), gyro->w()(1), gyro->w()(2)};
 
-            // Getting Bump Sensor Values
-            // surena_simulation::bump bump_msg;
             Matrix4d l_ankle, r_ankle;
-            l_ankle.block<3,1>(0, 3) = ioBody->joint(11)->position().translation();
-            r_ankle.block<3,1>(0, 3) = ioBody->joint(5)->position().translation();
-            l_ankle.block<3,3>(0, 0) = ioBody->joint(11)->position().rotation();
-            r_ankle.block<3,3>(0, 0) = ioBody->joint(5)->position().rotation();
-            
+            l_ankle.block<3, 1>(0, 3) = ioBody->joint(11)->position().translation();
+            r_ankle.block<3, 1>(0, 3) = ioBody->joint(5)->position().translation();
+            l_ankle.block<3, 3>(0, 0) = ioBody->joint(11)->position().rotation();
+            r_ankle.block<3, 3>(0, 0) = ioBody->joint(5)->position().rotation();
+
             Vector3d base_pos = ioBody->link(0)->p();
             Matrix3d base_rot = ioBody->link(0)->R();
 
             // rotation to quaternion
             Quaterniond base_quat(base_rot);
-            
-            Vector3d left_ankle_pos = l_ankle.block<3,1>(0, 3);
-            Vector3d right_ankle_pos = r_ankle.block<3,1>(0, 3);
+
+            Vector3d left_ankle_pos = l_ankle.block<3, 1>(0, 3);
+            Vector3d right_ankle_pos = r_ankle.block<3, 1>(0, 3);
             // cout << base_pos(0) << "," << base_pos(1) << "," << base_pos(2) << ",";
             // cout << base_quat.w() << "," << base_quat.x() << "," << base_quat.y() << "," << base_quat.z() << endl;
             // cout << left_ankle_pos(0) << "," << left_ankle_pos(1) << "," << left_ankle_pos(2) << ",";
             // cout << right_ankle_pos(0) << "," << right_ankle_pos(1) << "," << right_ankle_pos(2) << endl;
-            // for(int i = 0; i < 16; i ++){
-            //     bump_msg.request.left_trans[i] = l_ankle(i / 4, i % 4);
-            //     bump_msg.request.right_trans[i] = r_ankle(i / 4, i % 4);
-            // }
-            // bumpSensor.call(bump_msg);
-            // jntangs.request.bump = bump_msg.response.bump_vals;
 
-            // jnt_client.call(jntangs);
             robot->getJointAngs(idx, cur_q, jnt_vel, right_ft, left_ft, right_bump,
-                                    left_bump, gyroscope, accelerometer, jnt_command, status);
+                                left_bump, gyroscope, accelerometer, jnt_command, status);
 
-            for (int j=0; j<12; j++)
+            for (int j = 0; j < 12; j++)
                 qref[surenaIndex_[j]] = jnt_command[j];
-                
-            for(int i=0; i < ioBody->numJoints(); ++i){
-                Link* joint = ioBody->joint(i);
+
+            for (int i = 0; i < ioBody->numJoints(); ++i)
+            {
+                Link *joint = ioBody->joint(i);
                 double q = joint->q();
                 double dq = (q - qold[i]) / dt;
                 double u = (qref[i] - q) * pgain[i] + (0.0 - dq) * dgain[i];
                 qold[i] = q;
                 joint->u() = u;
             }
-            idx ++;
-        }else{
-            if(idx == size_ - 1){
+            idx++;
+        }
+        else
+        {
+            if (idx == size_ - 1)
+            {
                 isRunningTrajectory = false;
                 robot->resetTraj();
             }
-            for(int i=0; i < ioBody->numJoints(); ++i){
-                Link* joint = ioBody->joint(i);
+            for (int i = 0; i < ioBody->numJoints(); ++i)
+            {
+                Link *joint = ioBody->joint(i);
                 double q = joint->q();
                 double dq = (q - qold[i]) / dt;
                 double u = (qref[i] - q) * pgain[i] + (0.0 - dq) * dgain[i];
