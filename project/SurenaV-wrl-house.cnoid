@@ -1,8 +1,9 @@
 items: 
   id: 0
-  name: "Root"
+  name: "RootItem"
   plugin: Base
   class: RootItem
+  is_builtin_item: true
   children: 
     - 
       id: 1
@@ -10,8 +11,8 @@ items:
       plugin: Body
       class: WorldItem
       data: 
-        collisionDetection: false
-        collisionDetector: AISTCollisionDetector
+        collision_detection: false
+        collision_detector: AISTCollisionDetector
         default_material_table_file: "${SHARE}/default/materials.yaml"
       children: 
         - 
@@ -19,26 +20,25 @@ items:
           name: "house (copy)"
           plugin: Body
           class: BodyItem
-          is_selected: true
           is_checked: true
           data: 
-            file: "../../choreonoid/share/model/house/house (copy).wrl"
+            file: "${HOME}/DynCont/Code/SurenaControl/src/Simulation/choreonoid/share/model/house/house (copy).wrl"
             format: CHOREONOID-BODY
-            rootPosition: [ 5.72281166, 1.63730762, 0.284200948 ]
+            rootPosition: [ 4.33868852, 1.63730762, 0.284200948 ]
             rootAttitude: [ 
-              -0.364590111, -1.57824351e-26, -0.931168111, 
-              -0.931168111, -6.123234e-17, 0.364590111, 
-              -5.70176024e-17, 1, 2.23247056e-17 ]
+              0, 0, -1, 
+              -1, 0, 0, 
+              0, 1, 0 ]
             jointPositions: [  ]
-            initialRootPosition: [ 5.72281166, 1.63730762, 0.284200948 ]
+            initialRootPosition: [ 4.33868852, 1.63730762, 0.284200948 ]
             initialRootAttitude: [ 
-              -0.364590111, -1.66533454e-16, -0.931168111, 
-              -0.931168111, 6.48503473e-12, 0.364590111, 
-              0, 1, 6.48481269e-12 ]
-            staticModel: true
+              0, 0, -1, 
+              -1, 0, 0, 
+              0, 1, 0 ]
+            fix_root: true
             collisionDetection: true
             selfCollisionDetection: false
-            location_editable: false
+            lock_location: true
             scene_sensitive: true
             zmp: [ 0, 0, 0 ]
         - 
@@ -47,19 +47,20 @@ items:
           plugin: Body
           class: AISTSimulatorItem
           data: 
-            timeStep: 0.002
-            realtimeSync: true
-            recording: "full"
-            timeRangeMode: "Unlimited"
-            timeLength: 180
-            active_control_time_range_mode: false
-            allLinkPositionOutputMode: false
-            deviceStateOutput: true
-            controllerThreads: true
-            recordCollisionData: false
-            controllerOptions: ""
+            time_step: 0.002
+            realtime_sync_mode: compensatory
+            recording: full
+            time_range_mode: unlimited
+            time_length: 180
+            is_active_control_time_range_mode: false
+            output_all_link_positions: false
+            output_device_states: true
+            use_controller_threads: true
+            record_collision_data: false
+            controller_options: ""
+            block_scene_view_edit_mode: false
             dynamicsMode: "Forward dynamics"
-            integrationMode: "Runge Kutta"
+            integrationMode: runge-kutta
             gravity: [ 0, 0, -9.81 ]
             min_friction_coefficient: 0
             max_friction_coefficient: 100
@@ -80,27 +81,28 @@ items:
               class: GLVisionSimulatorItem
               data: 
                 enabled: true
-                maxFrameRate: 1000
-                maxLatency: 1
-                recordVisionData: false
-                threadMode: Sensor
-                bestEffort: false
-                allSceneObjects: false
-                rangeSensorPrecisionRatio: 2
-                depthError: 0
-                enableHeadLight: true
-                enableAdditionalLights: true
-                antiAliasing: false
+                max_frame_rate: 1000
+                max_latency: 1
+                record_vision_data: false
+                thread_mode: Sensor
+                best_effort: false
+                all_scene_objects: false
+                range_sensor_precision_ratio: 2
+                depth_error: 0
+                enable_head_light: true
+                enable_additional_lights: true
+                antialiasing: false
         - 
           id: 5
           name: "SURENA5"
           plugin: Body
           class: BodyItem
+          is_selected: true
           is_checked: true
           data: 
-            file: "../model/SurenaV/surena5.wrl"
+            file: "${HOME}/DynCont/Code/SurenaControl/src/Simulation/surena_choreonoid/model/SurenaV/surena5.wrl"
             format: CHOREONOID-BODY
-            rootPosition: [ 0, 0, 0.6 ]
+            rootPosition: [ 0, 0, 0.881 ]
             rootAttitude: [ 
               1, 0, 0, 
               0, 1, 0, 
@@ -111,7 +113,7 @@ items:
             jointPositions: [ 
               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
               0, 0 ]
-            initialRootPosition: [ 0, 0, 0.90264 ]
+            initialRootPosition: [ 0, 0, 0.881 ]
             initialRootAttitude: [ 
               1, 0, 0, 
               0, 1, 0, 
@@ -119,16 +121,13 @@ items:
             initialJointPositions: [ 
               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
               0, 0 ]
-            staticModel: false
+            fix_root: false
             collisionDetection: true
             selfCollisionDetection: false
-            location_editable: true
+            lock_location: false
             scene_sensitive: true
             link_kinematics: 
               "RLeg_AnkleR_J6": 
-                base_frame: 0
-                offset_frame: 0
-              "LLeg_AnkleR_J6": 
                 base_frame: 0
                 offset_frame: 0
             zmp: [ 0, 0, 0 ]
@@ -141,11 +140,10 @@ items:
               data: 
                 isNoDelayMode: false
                 controllerOptions: ""
-                controller: "../../../build/surena_simulation/lib/choreonoid-1.8/simplecontroller/SurenaController"
-                baseDirectory: "None"
+                controller: "${HOME}/DynCont/Code/SurenaControl/build/surena_simulation/lib/choreonoid-1.8/simplecontroller/SurenaController"
+                base_directory: "None"
                 reloading: false
-                exportSymbols: false
-                isOldTargetVariableMode: false
+                export_symbols: false
               children: 
                 - 
                   id: 7
@@ -155,52 +153,10 @@ items:
                   data: 
                     isNoDelayMode: false
                     controllerOptions: "CameraSampleController"
-                    controller: "../../../build/surena_simulation/lib/choreonoid-1.8/simplecontroller/CameraController"
-                    baseDirectory: "None"
+                    controller: "${HOME}/DynCont/Code/SurenaControl/build/surena_simulation/lib/choreonoid-1.8/simplecontroller/CameraController"
+                    base_directory: "None"
                     reloading: false
-                    exportSymbols: false
-                    isOldTargetVariableMode: false
-            - 
-              id: 8
-              name: "SensorVisualizer"
-              plugin: Body
-              class: SensorVisualizerItem
-              data: 
-                sub_items: 
-                  - 
-                    class: ForceSensorVisualizerItem
-                    name: ForceSensor
-                    is_checked: true
-                    visualRatio: 0.002
-                  - 
-                    class: CameraImageVisualizerItem
-                    name: camera_Image
-        - 
-          id: 9
-          name: "Floor"
-          plugin: Body
-          class: BodyItem
-          is_checked: true
-          data: 
-            file: "../../choreonoid/share/model/misc/floor.body"
-            format: CHOREONOID-BODY
-            rootPosition: [ 0, 0, -0.1 ]
-            rootAttitude: [ 
-              0.999999873, -0.000504576255, 0, 
-              0.000504576255, 0.999999873, -0, 
-              0, 0, 1 ]
-            jointPositions: [  ]
-            initialRootPosition: [ 0, 0, -0.1 ]
-            initialRootAttitude: [ 
-              1, 0, 0, 
-              0, 1, 0, 
-              0, 0, 1 ]
-            staticModel: true
-            collisionDetection: true
-            selfCollisionDetection: false
-            location_editable: true
-            scene_sensitive: true
-            zmp: [ 0, 0, 0 ]
+                    export_symbols: false
 views: 
   - 
     id: 0
@@ -213,17 +169,16 @@ views:
     class: ItemTreeView
     mounted: true
     state: 
-      expanded: [ 1, 3, 5, 6, 8 ]
+      expanded: [ 1, 3, 5 ]
   - 
     id: 2
-    name: "Location"
     plugin: Base
     class: LocationView
     mounted: true
     state: 
       show_rpy: true
       unique_rpy: false
-      show_quoternion: false
+      show_quaternion: false
       show_rotation_matrix: false
       coordinate: world
   - 
@@ -237,60 +192,51 @@ views:
     class: SceneView
     mounted: true
     state: 
-      editMode: false
+      editMode: true
       viewpointOperationMode: thirdPerson
       visible_polygon_elements: [ face ]
       highlighting: false
       collisionLines: false
-      restrictCameraRoll: true
-      verticalAxis: Z
-      lightingMode: normal
-      cullingMode: enabled
-      defaultHeadLight: true
-      defaultHeadLightIntensity: 0.75
-      headLightLightingFromBack: false
-      worldLight: true
-      worldLightIntensity: 0.5
-      worldLightAmbient: 0.25
-      additionalLights: true
-      fog: true
-      floorGrid: true
-      floorGridSpan: 10
-      floorGridInterval: 0.5
-      xzGridSpan: 10
-      xzGridInterval: 0.5
-      xzGrid: false
-      yzGridSpan: 10
-      yzGridInterval: 0.5
-      texture: true
-      lineWidth: 1
-      pointSize: 1
-      normalVisualization: false
-      normalLength: 0.01
-      lightweightViewChange: false
-      coordinateAxes: true
-      fpsTestIteration: 1
-      upsideDown: false
       cameras: 
         - 
           camera: [ System, Perspective ]
           isCurrent: true
-          fieldOfView: 0.610865
-          near: 0.04
-          far: 200
-          eye: [ 11.3897, -3.65566, 18.6585 ]
-          direction: [ -0.491472, -0.00179272, -0.870892 ]
-          up: [ -0.870886, -0.00317669, 0.491475 ]
+          eye: [ 0.283735, 2.38089, 2.24636 ]
+          direction: [ 0.209041, -0.843791, -0.494286 ]
+          up: [ 0.118862, -0.479782, 0.869299 ]
         - 
           camera: [ System, Orthographic ]
           orthoHeight: 20
-          near: 0.04
-          far: 200
-      backgroundColor: [ 0.1, 0.1, 0.3 ]
-      gridColor: [ 0.9, 0.9, 0.9, 1 ]
-      xzgridColor: [ 0.9, 0.9, 0.9, 1 ]
-      yzgridColor: [ 0.9, 0.9, 0.9, 1 ]
-      isDedicatedItemCheckEnabled: false
+      lighting_mode: normal
+      culling_mode: enabled
+      shading_mode: smooth
+      world_light: true
+      world_light_intensity: 0.5
+      ambient_light: true
+      ambient_light_intensity: 0.25
+      head_light: true
+      head_light_intensity: 0.75
+      world_light_shadow: true
+      shadow_lights: 
+        - { index: 0, enabled: false }
+        - { index: 1, enabled: false }
+      background_color: [ 0.1, 0.1, 0.3 ]
+      line_width: 1
+      point_size: 1
+      field_of_view: 35
+      clip_distances: [ 0.04, 200 ]
+      floorGrid: true
+      floorGridSpan: 10
+      floorGridInterval: 0.5
+      xzGrid: false
+      xzGridSpan: 10
+      xzGridInterval: 0.5
+      yzGrid: false
+      yzGridSpan: 10
+      yzGridInterval: 0.5
+      xy_grid_color: [ 0.9, 0.9, 0.9 ]
+      xz_grid_color: [ 0.9, 0.9, 0.9 ]
+      yz_grid_color: [ 0.9, 0.9, 0.9 ]
   - 
     id: 5
     plugin: Body
@@ -304,50 +250,42 @@ views:
     class: JointDisplacementView
     mounted: true
     state: 
-      show_selected_joints: false
       show_joint_ids: true
       show_joint_names: false
       overlap_joint_names: false
       show_sliders: true
       show_dials: false
       show_phases: true
+      limit_ranges: false
+      show_selected_joints: false
   - 
     id: 7
-    name: "Links / Devices"
     plugin: Body
     class: LinkDeviceListView
     mounted: true
     state: 
       element_type: all
-      listingMode: list
-      current_body_item: 2
+      listing_mode: list
+      current_body_item: 5
       body_items: 
         - 
           id: 2
           selected_links: [ 0 ]
-        - 
-          id: 5
-          selected_links: [ 0 ]
-        - 
-          id: 9
-          selected_links: [ 0 ]
   - 
     id: 8
-    name: "Link Position"
     plugin: Body
     class: LinkPositionView
     mounted: true
     state: 
-      coordinate_mode: world
+      coordinate_mode: base
       preferred_coordinate_mode: base
       show_rpy: true
       unique_rpy: false
-      show_quoternion: false
+      show_quaternion: false
       show_rotation_matrix: false
       target_link_type: ik_link
   - 
     id: 9
-    name: "Link Properties"
     plugin: Body
     class: LinkPropertyView
     mounted: true
@@ -358,15 +296,15 @@ views:
     mounted: true
 toolbars: 
   "TimeBar": 
-    minTime: 0
-    maxTime: 30
-    frameRate: 1000
-    playbackFrameRate: 60
-    idleLoopDrivenMode: false
-    currentTime: 0
-    speedScale: 1
-    syncToOngoingUpdates: true
-    autoExpansion: true
+    current_time: 5.396
+    min_time: 0
+    max_time: 30
+    frame_rate: 1000
+    playback_frame_rate: 60
+    idle_loop_driven_mode: false
+    playback_speed_ratio: 1
+    sync_to_ongoing_updates: true
+    auto_expansion: true
   "LeggedBodyBar": 
     stanceWidth: 0.15
   "KinematicsBar": 
@@ -379,62 +317,10 @@ toolbars:
     snapDistance: 0.025
     penetrationBlockDepth: 0.0005
     lazyCollisionDetectionMode: true
-  "BodyMotionGenerationBar": 
-    autoGenerationForNewBody: true
-    balancer: false
-    autoGeneration: false
-    timeScaleRatio: 1
-    preInitialDuration: 1
-    postFinalDuration: 1
-    onlyTimeBarRange: false
-    makeNewBodyItem: true
-    stealthyStepMode: true
-    stealthyHeightRatioThresh: 2
-    flatLiftingHeight: 0.005
-    flatLandingHeight: 0.005
-    impactReductionHeight: 0.005
-    impactReductionTime: 0.04
-    autoZmp: true
-    minZmpTransitionTime: 0.1
-    zmpCenteringTimeThresh: 0.03
-    zmpTimeMarginBeforeLiftingSpin: 0
-    zmpMaxDistanceFromCenter: 0.02
-    allLinkPositions: false
-    lipSyncMix: false
-    timeToStartBalancer: 0
-    balancerIterations: 2
-    plainBalancerMode: false
-    boundaryConditionType: position
-    boundarySmootherType: quintic
-    boundarySmootherTime: 0.5
-    boundaryCmAdjustment: false
-    boundaryCmAdjustmentTime: 1
-    waistHeightRelaxation: false
-    gravity: 9.8
-    dynamicsTimeRatio: 1
 Body: 
-  "BodyMotionEngine": 
-    updateJointVelocities: false
   "BodySelectionManager": 
-    current_body_item: 2
-    current_link: "Root"
-  "EditableSceneBody": 
-    editableSceneBodies: 
-      - 
-        bodyItem: 2
-        show_cm: false
-        show_cm_projection: false
-        show_zmp: false
-      - 
-        bodyItem: 5
-        show_cm: false
-        show_cm_projection: false
-        show_zmp: false
-      - 
-        bodyItem: 9
-        show_cm: false
-        show_cm_projection: false
-        show_zmp: false
+    current_body_item: 5
+    current_link: "Pelvis"
   "KinematicFaultChecker": 
     checkJointPositions: true
     angleMargin: 0
@@ -444,6 +330,18 @@ Body:
     targetJoints: all
     checkSelfCollisions: true
     onlyTimeBarRange: false
+  "OperableSceneBody": 
+    scene_bodies: 
+      - 
+        body_item: 2
+        show_cm: false
+        show_cm_projection: false
+        show_zmp: false
+      - 
+        body_item: 5
+        show_cm: false
+        show_cm_projection: false
+        show_zmp: false
   "SplineFilterDialog": 
     isInputFrameRateSpecified: false
     inputFrameRate: 200
@@ -456,17 +354,17 @@ viewAreas:
     contents: 
       type: splitter
       orientation: horizontal
-      sizes: [ 990, 314 ]
+      sizes: [ 1400, 444 ]
       children: 
         - 
           type: splitter
           orientation: horizontal
-          sizes: [ 256, 730 ]
+          sizes: [ 362, 1034 ]
           children: 
             - 
               type: splitter
               orientation: vertical
-              sizes: [ 295, 293 ]
+              sizes: [ 451, 447 ]
               children: 
                 - 
                   type: pane
@@ -478,7 +376,7 @@ viewAreas:
             - 
               type: splitter
               orientation: vertical
-              sizes: [ 441, 147 ]
+              sizes: [ 674, 224 ]
               children: 
                 - 
                   type: pane
@@ -491,7 +389,7 @@ viewAreas:
         - 
           type: splitter
           orientation: vertical
-          sizes: [ 186, 402 ]
+          sizes: [ 284, 614 ]
           children: 
             - 
               type: pane
@@ -499,7 +397,7 @@ viewAreas:
             - 
               type: splitter
               orientation: vertical
-              sizes: [ 268, 130 ]
+              sizes: [ 411, 199 ]
               children: 
                 - 
                   type: pane

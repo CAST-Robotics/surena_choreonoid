@@ -169,7 +169,7 @@ public:
         dt = io->timeStep();
         final_com_pos[2] = 0.68;
         string config_path = ros::package::getPath("trajectory_planner") + "/config/surenav_config.json";
-        robot = new Robot(&nh, config_path);
+        robot = new Robot(&nh, config_path, true);
         callGeneralTraj(2);
         callTraj();
         isRunningTrajectory = true;
