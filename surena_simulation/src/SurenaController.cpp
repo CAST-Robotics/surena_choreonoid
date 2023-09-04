@@ -101,6 +101,7 @@ class SurenaController : public SimpleController
     double ankle_height = 0.025;
     double step_height = 0;
     double theta = 0.0;
+    double slope = -0.0;
     bool isRunningTrajectory = false;
 
     int size_;
@@ -118,7 +119,7 @@ public:
     {
         robot->trajGen(step_count, t_step, alpha, t_double_support, COM_height,
                        step_length, step_width, dt, theta, ankle_height,
-                       step_height, 0);
+                       step_height, slope);
         idx = 0;
     }
 
