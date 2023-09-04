@@ -1,0 +1,33 @@
+format: ChoreonoidBody
+formatVersion: 1.0
+angleUnit: degree
+name: Ramp
+
+links:
+  -
+    name: CHASSIS
+    translation: [ 1.78, 0, 0.1 ]
+    jointType: fixed
+    material: Ground
+    AMOR: true
+    centerOfMass: [ 0, 0, 0 ]
+    mass: 8.0
+    inertia: [
+      0.1, 0,   0,
+      0,   0.1, 0,
+      0,   0,   0.5 ]
+    elements:
+      Shape:
+        geometry:
+          type: Extrusion
+          crossSection: [
+            -1.6, -0.1,
+             0.34, -0.1,
+             0.34,  0.06,
+            -0.0,  0.06,
+            -1.6, -0.1
+            ]
+          spine: [ 0, -0.2, 0, 0, 0.2, 0 ]
+        appearance:
+          material:
+            diffuseColor: [ 0.2, 0.2, 0.2 ]
