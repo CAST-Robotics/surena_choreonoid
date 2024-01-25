@@ -119,7 +119,7 @@ public:
     {
         robot->trajGen(step_count, t_step, alpha, t_double_support, COM_height,
                        step_length, step_width, dt, theta, ankle_height,
-                       step_height, slope);
+                       step_height, slope, 0.01, false);
         idx = 0;
     }
 

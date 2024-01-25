@@ -17,32 +17,6 @@ items:
       children: 
         - 
           id: 2
-          name: "Floor"
-          plugin: Body
-          class: BodyItem
-          is_checked: true
-          data: 
-            file: "${HOME}/DynCont/Code/SurenaControl/src/Simulation/choreonoid/share/model/misc/floor.body"
-            format: CHOREONOID-BODY
-            rootPosition: [ 0, 0, -0.1 ]
-            rootAttitude: [ 
-              1, 0, 0, 
-              0, 1, 0, 
-              0, 0, 1 ]
-            jointPositions: [  ]
-            initialRootPosition: [ 0, 0, -0.1 ]
-            initialRootAttitude: [ 
-              1, 0, 0, 
-              0, 1, 0, 
-              0, 0, 1 ]
-            fix_root: true
-            collisionDetection: true
-            selfCollisionDetection: false
-            lock_location: false
-            scene_sensitive: true
-            zmp: [ 0, 0, 0 ]
-        - 
-          id: 3
           name: "AISTSimulator"
           plugin: Body
           class: AISTSimulatorItem
@@ -74,15 +48,41 @@ items:
             2Dmode: false
             oldAccelSensorMode: false
         - 
+          id: 3
+          name: "Floor"
+          plugin: Body
+          class: BodyItem
+          is_checked: true
+          data: 
+            file: "${SHARE}/model/misc/floor.body"
+            format: CHOREONOID-BODY
+            rootPosition: [ 0, 0, -0.1 ]
+            rootAttitude: [ 
+              1, 0, 0, 
+              0, 1, 0, 
+              0, 0, 1 ]
+            jointPositions: [  ]
+            initialRootPosition: [ 0, 0, -0.1 ]
+            initialRootAttitude: [ 
+              1, 0, 0, 
+              0, 1, 0, 
+              0, 0, 1 ]
+            fix_root: true
+            collisionDetection: true
+            selfCollisionDetection: false
+            lock_location: false
+            scene_sensitive: true
+            zmp: [ 0, 0, 0 ]
+        - 
           id: 4
           name: "SURENA5"
           plugin: Body
           class: BodyItem
           is_checked: true
           data: 
-            file: "${HOME}/DynCont/Code/SurenaControl/src/Simulation/surena_choreonoid/model/SurenaV/surena5.wrl"
+            file: "${HOME}/DynCont/Code/catkin_ws/src/surena_choreonoid/model/SurenaV/surena5.wrl"
             format: CHOREONOID-BODY
-            rootPosition: [ 0, 0, 0.90264 ]
+            rootPosition: [ 0, 0, 0.903 ]
             rootAttitude: [ 
               1, 0, 0, 
               0, 1, 0, 
@@ -121,7 +121,7 @@ items:
               data: 
                 isNoDelayMode: false
                 controllerOptions: ""
-                controller: "${HOME}/DynCont/Code/SurenaControl/build/surena_simulation/lib/choreonoid-1.8/simplecontroller/SurenaController"
+                controller: ""
                 base_directory: "None"
                 reloading: false
                 export_symbols: false
@@ -334,7 +334,7 @@ Body:
   "OperableSceneBody": 
     scene_bodies: 
       - 
-        body_item: 2
+        body_item: 3
         show_cm: false
         show_cm_projection: false
         show_zmp: false
